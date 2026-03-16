@@ -3,12 +3,12 @@
     <div class="footer-content">
       <p class="copyright">
         <a
-          href="https://www.codefather.cn"
+          href="https://github.com/nanfei892/ai-code-mom"
           target="_blank"
           rel="noopener noreferrer"
           class="author-link"
         >
-          编程导航原创项目 by 程序员男妃
+          AI 零代码应用生成项目 by 程序员男妃
         </a>
       </p>
     </div>
