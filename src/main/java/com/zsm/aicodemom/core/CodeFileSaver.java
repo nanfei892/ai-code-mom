@@ -16,6 +16,7 @@ import java.nio.charset.StandardCharsets;
  * @projectName ai-code-mom
  * @description:
  */
+@Deprecated
 public class CodeFileSaver {
 
     // 文件保存根目录
