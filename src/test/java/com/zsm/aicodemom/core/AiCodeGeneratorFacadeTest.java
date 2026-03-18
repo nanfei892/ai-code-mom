@@ -20,13 +20,13 @@ class AiCodeGeneratorFacadeTest {
 
     @Test
     void generateAndSaveCode() {
-        File file = aiCodeGeneratorFacade.generateAndSaveCode("任务记录网站，总体不超过20行代码", CodeGenTypeEnum.MULTI_FILE);
+        File file = aiCodeGeneratorFacade.generateAndSaveCode("任务记录网站，总体不超过20行代码", CodeGenTypeEnum.MULTI_FILE, 1L);
         Assertions.assertNotNull(file);
     }
 
     @Test
     void generateAndSaveCodeStream() {
-        Flux<String> codeStream = aiCodeGeneratorFacade.generateAndSaveCodeStream("任务记录网站，总体不超过20行代码", CodeGenTypeEnum.MULTI_FILE);
+        Flux<String> codeStream = aiCodeGeneratorFacade.generateAndSaveCodeStream("任务记录网站，总体不超过20行代码", CodeGenTypeEnum.MULTI_FILE, 1L);
         // 阻塞等待所有数据收集完成
         List<String> result = codeStream.collectList().block();
         // 验证结果
@@ -35,3 +35,22 @@ class AiCodeGeneratorFacadeTest {
         Assertions.assertNotNull(completeContent);
     }
 }
+/**
+ # 1. 用户登录
+ curl -X POST "http://localhost:8123/api/user/login" \
+ -H "Content-Type: application/json" \
+ -d '{
+ "userAccount": "yupi",
+ "userPassword": "12345678"
+ }' \
+ -c cookies.txt
+
+ # 2. 调用生成代码接口（流式）
+ curl -G "http://localhost:8123/api/app/chat/gen/code" \
+ --data-urlencode "appId=391849734522515456" \
+ --data-urlencode "message=帮我创建一个简单的任务记录工具网站，总代码行不要超过50行" \
+ -H "Accept: text/event-stream" \
+ -H "Cache-Control: no-cache" \
+ -b cookies.txt \
+ --no-buffer
+ */

@@ -5,6 +5,8 @@ import com.mybatisflex.core.service.IService;
 import com.zsm.aicodemom.model.dto.app.AppQueryRequest;
 import com.zsm.aicodemom.model.dto.app.AppVO;
 import com.zsm.aicodemom.model.entity.App;
+import com.zsm.aicodemom.model.entity.User;
+import reactor.core.publisher.Flux;
 
 import java.util.List;
 
@@ -36,4 +38,12 @@ public interface AppService extends IService<App> {
      */
     List<AppVO> getAppVOList(List<App> appList);
 
+    /**
+     * 调用门面生成代码
+     * @param appId 应用 Id
+     * @param message 提示词
+     * @param loginUser 登录用户
+     * @return 流式响应
+     */
+    Flux<String> chatToGenCode(Long appId, String message, User loginUser);
 }
