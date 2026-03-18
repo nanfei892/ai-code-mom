@@ -1,0 +1,13 @@
+package com.zsm.aicodemom.mapper;
+
+import com.mybatisflex.core.BaseMapper;
+import com.zsm.aicodemom.model.entity.App;
+
+/**
+ * 应用 映射层。
+ *
+ * @author <a href="https://github.com/nanfei892">男妃</a>
+ */
+public interface AppMapper extends BaseMapper<App> {
+
+}
