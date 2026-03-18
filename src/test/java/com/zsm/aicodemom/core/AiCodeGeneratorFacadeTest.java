@@ -40,15 +40,15 @@ class AiCodeGeneratorFacadeTest {
  curl -X POST "http://localhost:8123/api/user/login" \
  -H "Content-Type: application/json" \
  -d '{
- "userAccount": "yupi",
- "userPassword": "12345678"
+ "userAccount": "nanfei",
+ "userPassword": "123456"
  }' \
  -c cookies.txt
 
  # 2. 调用生成代码接口（流式）
  curl -G "http://localhost:8123/api/app/chat/gen/code" \
- --data-urlencode "appId=391849734522515456" \
- --data-urlencode "message=帮我创建一个简单的任务记录工具网站，总代码行不要超过50行" \
+ --data-urlencode "appId=391826619000033280" \
+ --data-urlencode "message=帮我创建一个简单的家庭记账小工具，总代码行不要超过50行" \
  -H "Accept: text/event-stream" \
  -H "Cache-Control: no-cache" \
  -b cookies.txt \
