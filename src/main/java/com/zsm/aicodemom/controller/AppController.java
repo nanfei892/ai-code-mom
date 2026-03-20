@@ -138,7 +138,7 @@ public class AppController {
      * @return 应用详情
      */
     @GetMapping("/get/vo")
-    public BaseResponse<AppVO> getInfo(Long id) {
+    public BaseResponse<AppVO> getAppVoById(Long id) {
         ThrowUtils.throwIf(id <= 0, ErrorCode.PARAMS_ERROR);
         // 查询数据库
         App app = appService.getById(id);
@@ -155,7 +155,7 @@ public class AppController {
      * @return 应用列表
      */
     @PostMapping("/my/list/page/vo")
-    public BaseResponse<Page<AppVO>> listMyAppByPage(@RequestBody AppQueryRequest appQueryRequest, HttpServletRequest request) {
+    public BaseResponse<Page<AppVO>> listMyAppVoByPage(@RequestBody AppQueryRequest appQueryRequest, HttpServletRequest request) {
         ThrowUtils.throwIf(appQueryRequest == null, ErrorCode.PARAMS_ERROR);
         // 获取当前用户
         User loginUser = userService.getLoginUser(request);
@@ -311,9 +311,29 @@ public class AppController {
                 .concatWith(Mono.just(
                         // 发送结束事件
                         ServerSentEvent.<String>builder()
-                                .data("done")
+                                .event("done")
+                                .data("")
                                 .build()
                 ));
+    }
+
+    /**
+     * 应用部署
+     *
+     * @param appDeployRequest 部署请求
+     * @param request 请求对象
+     * @return 部署 URL
+     */
+    @PostMapping("/deploy")
+    public BaseResponse<String> deployApp(@RequestBody AppDeployRequest appDeployRequest, HttpServletRequest request) {
+        ThrowUtils.throwIf(appDeployRequest == null, ErrorCode.PARAMS_ERROR);
+        Long appId = appDeployRequest.getAppId();
+        ThrowUtils.throwIf(appId == null || appId <= 0, ErrorCode.PARAMS_ERROR, "应用 ID 无效");
+        // 获取当前登录用户
+        User loginUser = userService.getLoginUser(request);
+        // 调用服务部署应用
+        String deployUrl = appService.deployApp(appId, loginUser);
+        return ResultUtils.success(deployUrl);
     }
 
 

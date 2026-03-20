@@ -24,18 +24,18 @@
         <div class="user-login-status">
           <div v-if="loginUserStore.loginUser.id">
             <a-dropdown>
-            <a-space>
-              <a-avatar :src="loginUserStore.loginUser.userAvatar || defaultAvatar" />
-              {{ loginUserStore.loginUser.userName ?? '无名' }}
-            </a-space>
-            <template #overlay>
-              <a-menu>
-                <a-menu-item @click="doLogout">
-                  <LogoutOutlined />
-                  退出登录
+              <a-space>
+                <a-avatar :src="loginUserStore.loginUser.userAvatar || defaultAvatar" />
+                {{ loginUserStore.loginUser.userName ?? '无名' }}
+              </a-space>
+              <template #overlay>
+                <a-menu>
+                  <a-menu-item @click="doLogout">
+                    <LogoutOutlined />
+                    退出登录
                   </a-menu-item>
-              </a-menu>
-            </template>
+                </a-menu>
+              </template>
             </a-dropdown>
           </div>
           <div v-else>
@@ -52,9 +52,9 @@ import { computed, h, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { type MenuProps, message } from 'ant-design-vue'
 import { useLoginUserStore } from '@/stores/loginUser.ts'
-import defaultAvatar from '@/assets/defaultAvatar.jpg'
-import { LogoutOutlined } from '@ant-design/icons-vue'
 import { userLogout } from '@/api/userController.ts'
+import { LogoutOutlined, HomeOutlined } from '@ant-design/icons-vue'
+import defaultAvatar from '@/assets/defaultAvatar.jpg'
 
 const loginUserStore = useLoginUserStore()
 const router = useRouter()
@@ -69,6 +69,7 @@ router.afterEach((to, from, next) => {
 const originItems = [
   {
     key: '/',
+    icon: () => h(HomeOutlined),
     label: '主页',
     title: '主页',
   },
@@ -78,9 +79,14 @@ const originItems = [
     title: '用户管理',
   },
   {
+    key: '/admin/appManage',
+    label: '应用管理',
+    title: '应用管理',
+  },
+  {
     key: 'others',
-    label: h('a', { href: 'https://www.github.com', target: '_blank' }, 'GitHub地址'),
-    title: 'GitHub地址',
+    label: h('a', { href: 'https://github.com/nanfei892/ai-code-mom', target: '_blank' }, 'GitHub'),
+    title: 'GitHub',
   },
 ]
 
@@ -111,12 +117,12 @@ const handleMenuClick: MenuProps['onClick'] = (e) => {
   }
 }
 
-// 用户注销
+// 退出登录
 const doLogout = async () => {
   const res = await userLogout()
   if (res.data.code === 0) {
     loginUserStore.setLoginUser({
-      userName: '未登录'
+      userName: '未登录',
     })
     message.success('退出登录成功')
     await router.push('/user/login')

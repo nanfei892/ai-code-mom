@@ -1,8 +1,8 @@
 package com.zsm.aicodemom.core.saver;
 
 import cn.hutool.core.io.FileUtil;
-import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.StrUtil;
+import com.zsm.aicodemom.constant.AppConstant;
 import com.zsm.aicodemom.exception.BusinessException;
 import com.zsm.aicodemom.exception.ErrorCode;
 import com.zsm.aicodemom.model.enums.CodeGenTypeEnum;
@@ -19,7 +19,7 @@ import java.nio.charset.StandardCharsets;
 public abstract class CodeFileSaverTemplate<T> {
 
     // 文件保存根目录
-    protected static final String FILE_SAVE_ROOT_DIR = System.getProperty("user.dir") + "/tmp/code_output";
+    protected static final String FILE_SAVE_ROOT_DIR = AppConstant.CODE_OUTPUT_ROOT_DIR;
 
     /**
      * 模版方法：保存代码的标准流程
