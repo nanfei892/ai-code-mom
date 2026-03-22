@@ -6,6 +6,7 @@ import com.mybatisflex.core.service.IService;
 import com.zsm.aicodemom.model.dto.chathistory.ChatHistoryQueryRequest;
 import com.zsm.aicodemom.model.entity.ChatHistory;
 import com.zsm.aicodemom.model.entity.User;
+import dev.langchain4j.memory.chat.MessageWindowChatMemory;
 
 import java.time.LocalDateTime;
 
@@ -32,6 +33,15 @@ public interface ChatHistoryService extends IService<ChatHistory> {
      * @return 结果
      */
     boolean deleteByAppId(Long appId);
+
+    /**
+     * 将对话历史加载到内存中
+     * @param appId 应用 ID
+     * @param chatMemory 聊天内存
+     * @param maxCount 最大条数
+     * @return 加载的条数
+     */
+    int loadChatHistoryToMemory(Long appId, MessageWindowChatMemory chatMemory, int maxCount);
 
     /**
      * 获取查询包装类
