@@ -60,6 +60,7 @@ public class AiCodeGeneratorServiceFactory {
         return serviceCache.get(appId, this::createAiCodeGeneratorService);
     }
 
+
     /**
      * 创建新的 AI 服务实例
      * @param appId 应用 ID
