@@ -4,16 +4,16 @@ import cn.hutool.core.util.ObjUtil;
 import lombok.Getter;
 
 /**
+ * 代码生成模式枚举
+ *
  * @author zsm
- * @date 2026/3/16 10:16
- * @projectName ai-code-mom
- * @description:
  */
 @Getter
 public enum CodeGenTypeEnum {
 
     HTML("原生HTML模式", "html"),
-    MULTI_FILE("原生多文件模式", "multi_file");
+    MULTI_FILE("原生多文件模式", "multi_file"),
+    VUE_PROJECT("Vue工程模式", "vue_project");
 
     private final String text;
     private final String value;
@@ -25,6 +25,7 @@ public enum CodeGenTypeEnum {
 
     /**
      * 根据 value 获取枚举
+     *
      * @param value 枚举值的value
      * @return 枚举值
      */
