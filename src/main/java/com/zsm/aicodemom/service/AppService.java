@@ -2,6 +2,7 @@ package com.zsm.aicodemom.service;
 
 import com.mybatisflex.core.query.QueryWrapper;
 import com.mybatisflex.core.service.IService;
+import com.zsm.aicodemom.model.dto.app.AppAddRequest;
 import com.zsm.aicodemom.model.dto.app.AppQueryRequest;
 import com.zsm.aicodemom.model.dto.app.AppVO;
 import com.zsm.aicodemom.model.entity.App;
@@ -37,6 +38,15 @@ public interface AppService extends IService<App> {
      * @return 应用详情列表
      */
     List<AppVO> getAppVOList(List<App> appList);
+
+    /**
+     * 创建应用
+     *
+     * @param appAddRequest 应用添加请求
+     * @param loginUser 登录用户
+     * @return 新增应用的 ID
+     */
+    Long createApp(AppAddRequest appAddRequest, User loginUser);
 
     /**
      * 调用门面生成代码
