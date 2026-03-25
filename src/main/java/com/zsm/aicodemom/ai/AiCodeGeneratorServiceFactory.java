@@ -2,7 +2,7 @@ package com.zsm.aicodemom.ai;
 
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
-import com.zsm.aicodemom.ai.tools.FileWriteTool;
+import com.zsm.aicodemom.ai.tools.*;
 import com.zsm.aicodemom.exception.BusinessException;
 import com.zsm.aicodemom.exception.ErrorCode;
 import com.zsm.aicodemom.model.enums.CodeGenTypeEnum;
@@ -43,6 +43,9 @@ public class AiCodeGeneratorServiceFactory {
 
     @Resource
     private ChatHistoryService chatHistoryService;
+
+    @Resource
+    private ToolManager toolManager;
 
     /**
      * AI 服务实例缓存
@@ -110,7 +113,7 @@ public class AiCodeGeneratorServiceFactory {
                     .streamingChatModel(reasoningStreamingChatModel)
                     // 必须使用 chatMemoryProvider，为每个memoryId绑定会话记忆
                     .chatMemoryProvider(memoryId -> chatMemory)
-                    .tools(new FileWriteTool())
+                    .tools(toolManager.getAllTools())
                     // 幻觉工具名称策略，当调用不存在的工具时，返回错误信息
                     .hallucinatedToolNameStrategy(toolExecutionRequest ->
                             ToolExecutionResultMessage.from(
