@@ -2,6 +2,8 @@ package com.zsm.aicodemom.ai;
 
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
+import com.zsm.aicodemom.ai.guardrail.PromptSafetyInputGuardrail;
+import com.zsm.aicodemom.ai.guardrail.RetryOutputGuardrail;
 import com.zsm.aicodemom.ai.tools.*;
 import com.zsm.aicodemom.exception.BusinessException;
 import com.zsm.aicodemom.exception.ErrorCode;
@@ -107,7 +109,7 @@ public class AiCodeGeneratorServiceFactory {
             case VUE_PROJECT -> {
                 // 使用多例模式的 StreamingChatModel 解决并发问题
                 StreamingChatModel reasoningStreamingChatModel = SpringContextUtil.getBean("reasoningStreamingChatModelPrototype", StreamingChatModel.class);
-                yield  AiServices.builder(AiCodeGeneratorService.class)
+                yield AiServices.builder(AiCodeGeneratorService.class)
                         .streamingChatModel(reasoningStreamingChatModel)
                         // 必须使用 chatMemoryProvider，为每个memoryId绑定会话记忆
                         .chatMemoryProvider(memoryId -> chatMemory)
@@ -117,6 +119,9 @@ public class AiCodeGeneratorServiceFactory {
                                 ToolExecutionResultMessage.from(
                                         toolExecutionRequest, "Error: there is no tool called " + toolExecutionRequest.name()
                                 ))
+                        .inputGuardrails(new PromptSafetyInputGuardrail())   // 添加输入护轨
+//                        .outputGuardrails(new RetryOutputGuardrail())     // 输出护轨 -- 防止影响流式输出暂时不用
+                        .maxSequentialToolsInvocations(20)    // 最多连续调用 20 次工具
                         .build();
             }
             case HTML, MULTI_FILE -> {
@@ -126,6 +131,9 @@ public class AiCodeGeneratorServiceFactory {
                         .chatModel(chatModel)
                         .streamingChatModel(openAiStreamingChatModel)
                         .chatMemory(chatMemory)
+                        .inputGuardrails(new PromptSafetyInputGuardrail())   // 添加输入护轨
+//                        .outputGuardrails(new RetryOutputGuardrail())     // 输出护轨 -- 防止影响流式输出暂时不用
+                        .maxSequentialToolsInvocations(10)    // 最多连续调用 10 次工具
                         .build();
             }
             default -> throw new BusinessException(ErrorCode.SYSTEM_ERROR, "不支持的代码生成类型：" + codeGenTypeEnum);
