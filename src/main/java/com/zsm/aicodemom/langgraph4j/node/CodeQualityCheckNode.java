@@ -5,7 +5,7 @@ import cn.hutool.core.util.StrUtil;
 import com.zsm.aicodemom.langgraph4j.ai.CodeQualityCheckService;
 import com.zsm.aicodemom.langgraph4j.model.QualityResult;
 import com.zsm.aicodemom.langgraph4j.state.WorkflowContext;
-import com.zsm.aicodemom.langgraph4j.utils.SpringContextUtil;
+import com.zsm.aicodemom.utils.SpringContextUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.bsc.langgraph4j.action.AsyncNodeAction;
 import org.bsc.langgraph4j.prebuilt.MessagesState;

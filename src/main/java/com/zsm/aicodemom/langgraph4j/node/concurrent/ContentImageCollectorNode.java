@@ -4,7 +4,7 @@ import com.zsm.aicodemom.langgraph4j.model.ImageCollectionPlan;
 import com.zsm.aicodemom.langgraph4j.state.ImageResource;
 import com.zsm.aicodemom.langgraph4j.state.WorkflowContext;
 import com.zsm.aicodemom.langgraph4j.tools.ImageSearchTool;
-import com.zsm.aicodemom.langgraph4j.utils.SpringContextUtil;
+import com.zsm.aicodemom.utils.SpringContextUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.bsc.langgraph4j.action.AsyncNodeAction;
 import org.bsc.langgraph4j.prebuilt.MessagesState;

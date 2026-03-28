@@ -1,4 +1,4 @@
-package com.zsm.aicodemom.langgraph4j.utils;
+package com.zsm.aicodemom.utils;
 
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;

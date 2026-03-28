@@ -3,7 +3,7 @@ package com.zsm.aicodemom.langgraph4j.node.concurrent;
 import com.zsm.aicodemom.langgraph4j.ai.ImageCollectionPlanService;
 import com.zsm.aicodemom.langgraph4j.model.ImageCollectionPlan;
 import com.zsm.aicodemom.langgraph4j.state.WorkflowContext;
-import com.zsm.aicodemom.langgraph4j.utils.SpringContextUtil;
+import com.zsm.aicodemom.utils.SpringContextUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.bsc.langgraph4j.action.AsyncNodeAction;
 import org.bsc.langgraph4j.prebuilt.MessagesState;

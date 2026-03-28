@@ -4,7 +4,7 @@ import com.zsm.aicodemom.core.builder.VueProjectBuilder;
 import com.zsm.aicodemom.exception.BusinessException;
 import com.zsm.aicodemom.exception.ErrorCode;
 import com.zsm.aicodemom.langgraph4j.state.WorkflowContext;
-import com.zsm.aicodemom.langgraph4j.utils.SpringContextUtil;
+import com.zsm.aicodemom.utils.SpringContextUtil;
 import com.zsm.aicodemom.model.enums.CodeGenTypeEnum;
 import lombok.extern.slf4j.Slf4j;
 import org.bsc.langgraph4j.action.AsyncNodeAction;

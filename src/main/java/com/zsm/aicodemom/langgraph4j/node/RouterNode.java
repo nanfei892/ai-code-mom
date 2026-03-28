@@ -1,8 +1,9 @@
 package com.zsm.aicodemom.langgraph4j.node;
 
 import com.zsm.aicodemom.ai.AiCodeGenTypeRoutingService;
+import com.zsm.aicodemom.ai.AiCodeGenTypeRoutingServiceFactory;
 import com.zsm.aicodemom.langgraph4j.state.WorkflowContext;
-import com.zsm.aicodemom.langgraph4j.utils.SpringContextUtil;
+import com.zsm.aicodemom.utils.SpringContextUtil;
 import com.zsm.aicodemom.model.enums.CodeGenTypeEnum;
 import lombok.extern.slf4j.Slf4j;
 import org.bsc.langgraph4j.action.AsyncNodeAction;
@@ -24,7 +25,8 @@ public class RouterNode {
             CodeGenTypeEnum generationType;
             try {
                 // 获取AI路由服务
-                AiCodeGenTypeRoutingService routingService = SpringContextUtil.getBean(AiCodeGenTypeRoutingService.class);
+                AiCodeGenTypeRoutingServiceFactory factory = SpringContextUtil.getBean(AiCodeGenTypeRoutingServiceFactory.class);
+                AiCodeGenTypeRoutingService routingService = factory.createAiCodeGenTypeRoutingService();
                 // 根据原始提示词进行智能路由
                 generationType = routingService.routeCodeGenType(context.getOriginalPrompt());
                 log.info("AI智能路由完成，选择类型: {} ({})", generationType.getValue(), generationType.getText());
