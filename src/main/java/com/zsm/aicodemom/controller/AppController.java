@@ -17,12 +17,15 @@ import com.zsm.aicodemom.exception.ThrowUtils;
 import com.zsm.aicodemom.model.dto.app.*;
 import com.zsm.aicodemom.model.entity.User;
 import com.zsm.aicodemom.model.enums.CodeGenTypeEnum;
+import com.zsm.aicodemom.ratelimit.RateLimitType;
+import com.zsm.aicodemom.ratelimit.annotation.RateLimit;
 import com.zsm.aicodemom.service.ProjectDownloadService;
 import com.zsm.aicodemom.service.UserService;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.http.MediaType;
 import org.springframework.http.codec.ServerSentEvent;
 import org.springframework.web.bind.annotation.*;
 import com.zsm.aicodemom.model.entity.App;
@@ -288,7 +291,8 @@ public class AppController {
      * @param request 请求对象
      * @return 生成结果流
      */
-    @GetMapping("/chat/gen/code")
+    @GetMapping(value = "/chat/gen/code", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    @RateLimit(limitType = RateLimitType.USER, rate = 5, rateInterval = 60, message = "AI 对话请求过于频繁，请稍后再试")
     public Flux<ServerSentEvent<String>> chatToGenCode(@RequestParam Long appId, @RequestParam String message, HttpServletRequest request) {
         // 参数校验
         ThrowUtils.throwIf(appId == null || appId <= 0, ErrorCode.PARAMS_ERROR, "应用 ID 无效");
