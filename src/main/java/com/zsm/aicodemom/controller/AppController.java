@@ -179,8 +179,8 @@ public class AppController {
     @PostMapping("/good/list/page/vo")
     @Cacheable(
             value = "good_app_page",
-            key = "T(com.zsm.aicodemom.utils.CacheKeyUtils).generateKey(appQueryRequest)",
-            condition = "#appQueryRequest.pageNum <= 10"
+            key = "T(com.zsm.aicodemom.utils.CacheKeyUtils).generateKey(#p0)",
+            condition = "#p0.pageNum <= 10"
     )
     public BaseResponse<Page<AppVO>> listGoodAppVOByPage(@RequestBody AppQueryRequest appQueryRequest) {
         ThrowUtils.throwIf(appQueryRequest == null, ErrorCode.PARAMS_ERROR);
