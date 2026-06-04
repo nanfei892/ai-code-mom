@@ -32,11 +32,19 @@ AI Code Mom 是一个面向 C 端用户的 **AI 零代码应用生成平台**。
 
 ## 项目介绍
 1.智能代码生成：用户输入需求描述，AI 自动分析并选择合适的生成策略，通过工具调用生成代码文件，采用流式输出让用户实时看到 AI 的执行过程。
+https://github.com/nanfei892/ai-code-mom/blob/master/images/1%E6%99%BA%E8%83%BD%E4%BB%A3%E7%A0%81%E7%94%9F%E6%88%90.png
+
 
 2.可视化编辑：生成的应用将实时展示，可以进入编辑模式，自由选择网页元素并且和 AI 对话来快速修改页面，直到满意为止。
+https://github.com/nanfei892/ai-code-mom/blob/master/images/2%E5%8F%AF%E8%A7%86%E5%8C%96%E7%BC%96%E8%BE%91.png
+
 
 3.一键部署分享：可以将生成的应用一键部署到云端并自动截取封面图，获得可访问的地址进行分享，同时支持完整项目源码下载。
+https://github.com/nanfei892/ai-code-mom/blob/master/images/3%E9%83%A8%E7%BD%B2.png
 
+
+精选案例
+https://github.com/nanfei892/ai-code-mom/blob/master/images/4%E6%9F%A5%E7%9C%8B%E7%B2%BE%E9%80%89%E6%A1%88%E4%BE%8B.png
 ---
 
 ## 核心功能
