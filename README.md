@@ -14,7 +14,7 @@
 [![MySQL](https://img.shields.io/badge/MySQL-8.0-4479a1?logo=mysql&logoColor=white)](https://www.mysql.com/)
 [![Redis](https://img.shields.io/badge/Redis-6.0-dc382d?logo=redis&logoColor=white)](https://redis.io/)
 
-[在线体验](http://110.42.141.105) · [接口文档](http://110.42.141.105/api/doc.html) · [GitHub 仓库](https://github.com/nanfei892/ai-code-mom)
+[在线体验](https://code.nanfei.chat/) · [GitHub 仓库](https://github.com/nanfei892/ai-code-mom)
 
 </div>
 
@@ -30,14 +30,12 @@ AI Code Mom 是一个面向 C 端用户的 **AI 零代码应用生成平台**。
 
 ---
 
-## 在线地址
+## 项目介绍
+1.智能代码生成：用户输入需求描述，AI 自动分析并选择合适的生成策略，通过工具调用生成代码文件，采用流式输出让用户实时看到 AI 的执行过程。
 
-| 类型 | 地址 |
-| --- | --- |
-| 在线体验 | [http://110.42.141.105](http://110.42.141.105) |
-| 后端接口 | `http://110.42.141.105/api` |
-| 接口文档 | [http://110.42.141.105/api/doc.html](http://110.42.141.105/api/doc.html) |
-| 开源仓库 | [https://github.com/nanfei892/ai-code-mom](https://github.com/nanfei892/ai-code-mom) |
+2.可视化编辑：生成的应用将实时展示，可以进入编辑模式，自由选择网页元素并且和 AI 对话来快速修改页面，直到满意为止。
+
+3.一键部署分享：可以将生成的应用一键部署到云端并自动截取封面图，获得可访问的地址进行分享，同时支持完整项目源码下载。
 
 ---
 
@@ -101,42 +99,6 @@ Vue 工程模式下，AI 不只是返回一段文本，而是通过工具调用�
 
 ---
 
-## 系统架构
-
-```mermaid
-flowchart TB
-    User["用户"] --> Frontend["Vue 3 前端"]
-
-    Frontend -->|"REST API"| Backend["Spring Boot 后端"]
-    Frontend -->|"SSE 流式生成"| Backend
-    Frontend -->|"iframe 预览"| Static["静态资源服务"]
-
-    Backend --> AppService["应用服务"]
-    Backend --> UserService["用户服务"]
-    Backend --> ChatService["对话历史服务"]
-
-    AppService --> Router["AI 生成类型路由"]
-    AppService --> Facade["AI 代码生成门面"]
-    Facade --> AiService["LangChain4j AI Service"]
-
-    AiService --> Model["OpenAI 兼容模型"]
-    AiService --> Tools["文件工具集"]
-    AiService --> Memory["Redis Chat Memory"]
-
-    AppService --> MySQL[("MySQL")]
-    ChatService --> MySQL
-    UserService --> MySQL
-    Memory --> Redis[("Redis")]
-
-    Facade --> Output["代码输出目录"]
-    AppService --> Deploy["部署目录"]
-    AppService --> Screenshot["Selenium 截图服务"]
-    Screenshot --> COS["腾讯云 COS"]
-    Deploy --> Static
-```
-
----
-
 ## 技术栈
 
 ### 后端
@@ -183,227 +145,6 @@ flowchart TB
 
 ---
 
-## 项目结构
-
-```text
-ai-code-mom/
-├── ai-code-mom-frontend/          # Vue 3 前端项目
-│   ├── src/api/                   # OpenAPI 生成的接口请求
-│   ├── src/components/            # 通用组件
-│   ├── src/pages/                 # 页面：主页、对话页、管理页、登录注册等
-│   ├── src/router/                # 前端路由
-│   ├── src/stores/                # Pinia 状态
-│   └── src/utils/                 # 工具方法
-├── sql/
-│   └── create_table.sql           # 数据库初始化脚本
-├── src/main/java/com/zsm/aicodemom/
-│   ├── ai/                        # LangChain4j AI 服务、路由、工具、护轨
-│   ├── annotation/                # 权限注解
-│   ├── aop/                       # 权限拦截切面
-│   ├── config/                    # Redis、CORS、模型、COS 等配置
-│   ├── controller/                # 用户、应用、对话、静态资源接口
-│   ├── core/                      # 代码生成门面、解析器、保存器、Vue 构建器
-│   ├── langgraph4j/               # LangGraph4j 工作流实验模块
-│   ├── manager/                   # COS 管理器
-│   ├── mapper/                    # MyBatis-Flex Mapper
-│   ├── model/                     # DTO、VO、实体、枚举
-│   ├── ratelimit/                 # Redisson 限流注解与切面
-│   └── service/                   # 业务服务
-├── src/main/resources/
-│   ├── mapper/                    # XML 映射文件
-│   ├── prompt/                    # AI 系统提示词
-│   └── application.yml            # 基础配置
-├── pom.xml                        # 后端 Maven 配置
-└── README.md
-```
-
----
-
-## 核心流程
-
-### 创建应用
-
-```text
-用户输入初始化 Prompt
-    -> AppController.addApp()
-    -> AppService.createApp()
-    -> AiCodeGenTypeRoutingService 选择生成模式
-    -> 应用信息写入 MySQL
-    -> 返回 appId
-```
-
-### 对话生成代码
-
-```text
-前端 EventSource 请求 /api/app/chat/gen/code
-    -> 后端校验登录态和应用归属
-    -> 保存用户消息到 chat_history
-    -> AiCodeGeneratorFacade 根据 codeGenType 分发
-    -> LangChain4j 流式生成代码
-    -> 解析并保存文件到 code_output
-    -> 保存 AI 回复到 chat_history
-    -> 前端刷新预览 iframe
-```
-
-### 部署应用
-
-```text
-用户点击部署
-    -> 校验应用归属
-    -> 检查生成目录
-    -> Vue 项目执行构建并部署 dist
-    -> 静态文件复制到部署目录
-    -> 生成 deployKey 和访问地址
-    -> 虚拟线程异步截图
-    -> 上传封面到 COS
-```
-
----
-
-## 快速开始
-
-### 环境要求
-
-| 依赖 | 建议版本 |
-| --- | --- |
-| JDK | 21+ |
-| Maven | 3.9+ |
-| Node.js | 18+ |
-| npm | 9+ |
-| MySQL | 8.0+ |
-| Redis | 6.0+ |
-
-### 1. 克隆项目
-
-```bash
-git clone https://github.com/nanfei892/ai-code-mom.git
-cd ai-code-mom
-```
-
-### 2. 初始化数据库
-
-```bash
-mysql -u root -p < sql/create_table.sql
-```
-
-### 3. 配置后端
-
-建议新建本地配置文件，并通过 Spring Profile 加载，不要把真实密钥提交到仓库。
-
-```yaml
-spring:
-  datasource:
-    url: jdbc:mysql://localhost:3306/ai_code_mom
-    username: your_mysql_username
-    password: your_mysql_password
-  data:
-    redis:
-      host: localhost
-      port: 6379
-
-langchain4j:
-  open-ai:
-    chat-model:
-      api-key: your_api_key
-      base-url: your_model_base_url
-    streaming-chat-model:
-      api-key: your_api_key
-      base-url: your_model_base_url
-```
-
-启动后端：
-
-```bash
-./mvnw spring-boot:run
-```
-
-默认后端地址：
-
-```text
-http://localhost:8123/api
-```
-
-接口文档：
-
-```text
-http://localhost:8123/api/doc.html
-```
-
-### 4. 启动前端
-
-```bash
-cd ai-code-mom-frontend
-npm install
-npm run dev
-```
-
-前端环境变量示例：
-
-```env
-VITE_API_BASE_URL=http://localhost:8123/api
-VITE_DEPLOY_DOMAIN=http://localhost
-```
-
-默认前端地址：
-
-```text
-http://localhost:5173
-```
-
----
-
-## API 概览
-
-| 模块 | 主要接口 |
-| --- | --- |
-| 健康检查 | `GET /api/health/` |
-| 用户 | 注册、登录、退出登录、获取当前用户 |
-| 应用 | 创建、删除、更新、详情、分页、精选列表 |
-| AI 生成 | `GET /api/app/chat/gen/code` |
-| 部署 | `POST /api/app/deploy` |
-| 下载 | `GET /api/app/download/{appId}` |
-| 对话历史 | 应用对话历史分页查询 |
-| 工作流实验 | `/api/workflow/execute`、`/api/workflow/execute-flux`、`/api/workflow/execute-sse` |
-
-完整接口参数可查看 Knife4j 文档。
-
----
-
-## 数据库设计
-
-| 表 | 说明 |
-| --- | --- |
-| `user` | 用户账号、密码、头像、角色等信息 |
-| `app` | 应用名称、封面、初始化 Prompt、生成类型、部署标识等 |
-| `chat_history` | 用户和 AI 的对话历史，支持按应用分页查询 |
-
----
-
-## 简历项目亮点
-
-如果将该项目写入简历，可以突出以下能力：
-
-- 独立完成 AI 零代码应用生成平台，从需求输入到代码生成、预览、部署形成完整闭环。
-- 基于 Spring Boot + Vue 3 构建前后端分离应用，包含用户体系、权限校验、管理后台和接口文档。
-- 深度使用 LangChain4j，实现流式对话、工具调用、对话记忆、提示词护轨和多模型配置。
-- 设计多模式代码生成策略，支持 HTML、多文件静态站、Vue 工程，并通过 AI 自动路由生成类型。
-- 使用 SSE 优化 AI 生成体验，让用户实时感知生成过程。
-- 使用 Redis、Redisson、Caffeine 提升系统稳定性，完成会话存储、限流保护和实例缓存。
-- 实现一键部署、代码下载、自动截图上传 COS 等产品化能力。
-- 探索 LangGraph4j 工作流，将素材收集、提示词增强、代码生成、质量检查等步骤节点化。
-
----
-
-## 后续规划
-
-- [ ] 增加项目演示截图和生成效果 GIF
-- [ ] 完善 README 中的部署架构图和线上 Nginx 配置说明
-- [ ] 支持更多前端技术栈生成，如 React、UniApp、小程序
-- [ ] 增强 Vue 工程生成后的自动检测、修复和测试能力
-- [ ] 将 LangGraph4j 工作流与主生成链路进一步融合
-- [ ] 增加应用模板市场和用户公开分享能力
-
----
 
 ## 作者
 
@@ -413,9 +154,3 @@ http://localhost:5173
 - 邮箱：nanfei892@gmail.com
 
 如果这个项目对你有帮助，欢迎 Star。
-
----
-
-## License
-
-当前仓库暂未补充开源协议文件。如需正式开源分发，建议添加 `LICENSE` 文件。
